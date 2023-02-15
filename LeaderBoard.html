@@ -279,24 +279,26 @@
                 root.insertAdjacentHTML('beforeend', `
                     <tr class="tbl-row ${success ? "tbl-success":""}">
                         <td>
-                            <span class="position">
-                                ${position}
-                            </span>
+                            <span id="position-${index}" class="position">?</span>
                         </td>
                         <td>
-                            <img class="flag-image" src="assets/flags/${element.flag}.jpg" onerror="this.src='assets/kekw.jpg'">
+                            <img id="flag-${index}" class="flag-image" onerror="this.src='assets/kekw.jpg'">
                         </td>
                         <td>
-                            <span class="team">
-                                ${element.name}
-                            </span>
+                            <span id="team-${index}" class="team">?</span>
                         </td>
                         <td>
-                            <span class="points">
-                                ${element.points}
-                            </span>
+                            <span id="points-${index}" class="points">?</span>
                         </td>
-                    </tr>`)
+                    </tr>`);                    
+                let positionElement = document.getElementById(`position-${index}`);
+                positionElement.textContent = position;
+                let teamElement = document.getElementById(`team-${index}`);
+                teamElement.textContent = element.name;
+                let pointsElement = document.getElementById(`points-${index}`);
+                pointsElement.textContent = element.points;
+                let flagElement = document.getElementById(`flag-${index}`);
+                flagElement.src = `assets/flags/${element.flag}.jpg`;
                 });
         }
 
