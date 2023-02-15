@@ -1,4 +1,5 @@
 <html>
+<script type="text/javascript" src="purify.min.js"></script>
 <script>
     // ===================================================================================================
     //   _____  _   _  _____            _                    _           _                         _ 
@@ -292,13 +293,13 @@
                         </td>
                     </tr>`);                    
                 let positionElement = document.getElementById(`position-${index}`);
-                positionElement.textContent = position;
+                positionElement.textContent = DOMPurify.sanitize(position);
                 let teamElement = document.getElementById(`team-${index}`);
-                teamElement.textContent = element.name;
+                teamElement.textContent = DOMPurify.sanitize(element.name);
                 let pointsElement = document.getElementById(`points-${index}`);
-                pointsElement.textContent = element.points;
+                pointsElement.textContent = DOMPurify.sanitize(element.points);
                 let flagElement = document.getElementById(`flag-${index}`);
-                flagElement.src = `assets/flags/${element.flag}.jpg`;
+                flagElement.src = `assets/flags/${DOMPurify.sanitize(element.flag)}.jpg`;
                 });
         }
 
@@ -307,7 +308,6 @@
             console.log("fetching data from; "+url)
             let response = await fetch(url);
             let leaderboard = await response.json();
-            console.log(leaderboard);
             renderLeaderboard(leaderboard);
         }
 
