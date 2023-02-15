@@ -2,8 +2,12 @@
 
 Website to display a leaderboard for rnc.
 
+### Flags
+
+Flags are from Nado. They should probably follow the [iso alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) standard but have not checked xdd
+
 ## Leaderboard
-The leaderboard is fetching data from [npotion.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. So for example `&npoint=efc43aed2665ee53a7d6` will fetch from ``https://api.npoint.io/efc43aed2665ee53a7d6``. A refresh button can be shown using `refresh=true` as url parameter
+The leaderboard is fetching data from [npotion.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. So for example `&npoint=efc43aed2665ee53a7d6` will fetch from `https://api.npoint.io/efc43aed2665ee53a7d6`.
 
 ```
 {
@@ -58,8 +62,10 @@ The leaderboard is fetching data from [npotion.io](https://www.npoint.io). To fe
 }
 ```
 
+## Refresh Button
+
+A refresh button can be shown using `refresh=true` as url parameter
+
+## Additional notes
+
 > To change the default end point edit the **href** in the `index.html` 
-
-### Flags
-
-Flags are from Nado. They should probably follow the [iso alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) standard but have not checked xdd
