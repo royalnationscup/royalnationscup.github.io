@@ -22,7 +22,7 @@
     var offlineLeaderboard = {
         title: "Leaderboard",
         startPosition: 1,
-        highlightPositions: [],
+        successPositions: [1, 2, 3],
         entries: [{
             name: "World",
             flag: "WOR",
@@ -71,9 +71,9 @@
             --text: rgb(194, 195, 204);
             --text-muted: rgb(81, 85, 85);
             --box: rgba(0, 0, 0, 0.315);
-            --highlight: rgb(59 148 221 / 52%);
-            --highlight-position: rgb(0 0 0 / 64%);
-            --highlight-points: rgb(85 216 255 / 95%);
+            --success: rgb(34 217 65 / 31%);
+            --success-position: rgb(0 0 0 / 64%);
+            --success-points: rgb(27 215 15 / 95%);
         }
         body {
             background-color: rgb(25 26 31);
@@ -141,8 +141,8 @@
             border: 1px;
         }
 
-        .tbl-highlight {
-            background-color: var(--highlight);
+        .tbl-success {
+            background-color: var(--success);
         }
 
         .center {
@@ -175,12 +175,12 @@
             margin-right: 5px;
         }
 
-        .tbl-highlight > td > .position {
-            color: var(--highlight-position);
+        .tbl-success > td > .position {
+            color: var(--success-position);
         }
 
-        .tbl-highlight > td > .points {
-            color: var(--highlight-points);
+        .tbl-success > td > .points {
+            color: var(--success-points);
         }
 
         .button{
@@ -275,9 +275,9 @@
             // generate table entries
             entries.forEach((element, index) => {
                 let position = leaderboard.startPosition + index;
-                let highlight = leaderboard.highlightPositions.includes(position);
+                let success = leaderboard.successPositions.includes(position);
                 root.insertAdjacentHTML('beforeend', `
-                    <tr class="tbl-row ${highlight ? "tbl-highlight":""}">
+                    <tr class="tbl-row ${success ? "tbl-success":""}">
                         <td>
                             <span class="position">
                                 ${position}

@@ -16,7 +16,7 @@ The leaderboard is fetching data from [npotion.io](https://www.npoint.io). To fe
   // applies a offset to the position
   "startPosition": 8,
   // array of positions to display in a diffrent color
-  "highlightPositions": [8,9,10],
+  "successPositions": [8,9,10],
   "entries": [
     {
       "name": "World",
