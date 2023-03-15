@@ -62,10 +62,46 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 }
 ```
 
-## Refresh Button
-
 A refresh button can be shown using `refresh=true` as url parameter
+
+
+## Team pages
+The team pages are also fetching data from [npoint.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. Also required is a flag id to identify the team. Add eg. `id=GER` as a parameter to fetch the german team.
+
+```
+{
+  "teams": [{
+    // display title
+    "name": "Germany",
+    // flag MUST match with the flag of the Leaderboard and is used as id
+    "flag": "GER",
+    "player": [
+      {
+        // player name
+        "name": "Player A",
+        // captain of the team
+        "role": "captain",
+      },
+      {
+        "name": "Player B",
+        // player that has won the qualifier
+        "role": "player",
+      },
+      {
+        "name": "Player C",
+        // unknown state (eg. qualifier not played)
+        "role": "none",
+      },
+      {
+        "name": "Player C",
+        // player did not make the qualifier
+        "role": "out",
+      },
+    ],
+}
+```
 
 ## Additional notes
 
 > To change the default end point edit the **href** in the `index.html` 
+> Another one is also in `LeaderBoard.html` for the team pages  
