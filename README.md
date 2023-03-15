@@ -66,7 +66,7 @@ A refresh button can be shown using `refresh=true` as url parameter
 
 
 ## Team pages
-The team pages are also fetching data from [npoint.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. Also required is a flag id to identify the team. Add eg. `id=GER` as a parameter to fetch the german team.
+The team pages are also fetching data from [npoint.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. Also required is a flag id to identify the team. Add eg. `id=GER` as a parameter to fetch the German team.
 
 ```
 {
@@ -96,12 +96,13 @@ The team pages are also fetching data from [npoint.io](https://www.npoint.io). T
         "name": "Player C",
         // player did not make the qualifier
         "role": "out",
-      },
-    ],
+      }
+    ]
+  }]
 }
 ```
 
 ## Additional notes
 
-> To change the default end point edit the **href** in the `index.html` 
+> To change the default end point edit the **href** in the `index.html`.
 > Another one is also in `LeaderBoard.html` for the team pages  
