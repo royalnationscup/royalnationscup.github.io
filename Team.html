@@ -13,26 +13,33 @@
         teams: [{
             name: "Germany",
             flag: "GER",
+            orderByPoints: true,
+            showPoints: true,
             player: [
                 {
                     name: "Player A",
                     role: "captain",
+                    points: 13
                 },
                 {
                     name: "Player B",
                     role: "player",
+                    points: 13
                 },
                 {
                     name: "Player C",
                     role: "player",
+                    points: 14
                 },
                 {
                     name: "Player C",
                     role: "none",
+                    points: 9
                 },
                 {
                     name: "Player D",
                     role: "out",
+                    points: 5
                 }
             ],
         }]
@@ -54,6 +61,7 @@
             --success: rgb(34 217 65 / 31%);
             --success-position: rgb(0 0 0 / 64%);
             --success-points: rgb(27 215 15 / 95%);
+            --danger-points: rgba(179, 60, 14, 0.95);
             --danger: rgba(217, 71, 34, 0.31);
         }
         body {
@@ -167,6 +175,21 @@
             color: var(--success-position);
         }
 
+        .points {
+            font-family: 'Soloist', sans-serif;
+            color: var(--primary)
+        }
+
+        .tbl-captain > td > .points {
+            color: var(--success-points);
+        }
+        .tbl-player > td > .points {
+            color: var(--success-points);
+        }
+        .tbl-out > td > .points {
+            color: var(--danger-points);
+        }
+
         .flag-image {
             max-height: 9em;
             max-width: 6em;
@@ -207,14 +230,17 @@
         </div>
         <table class="table center">
             <thead>
-                <tr class="tbl-header">
-                    <th class="headder" style="width: 2em;">
+                <tr id="tbl-header" class="tbl-header">
+                    <th class="header" style="width: 2em;">
                     </th>
-                    <th class="headder" style="width: 5em;">
+                    <th class="header" style="width: 5em;">
                         <h2>Role</h2>
                     </th>
-                    <th class="headder">
+                    <th class="header">
                         <h2>Player</h2>
+                    </th>
+                    <th id="score-header" class="header">
+                        <h2>Score</h2>
                     </th>
                 </tr>
             </thead>
@@ -245,6 +271,24 @@
             return null;
         }
 
+        function processTeamPlayer(player){
+            // Sort the data for points
+            player.sort((a, b) => {
+                var pointCompare = b.points - a.points;
+                if (pointCompare != 0) {
+                    return pointCompare;
+                }
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            });
+            return player;
+        }
+
         function renderTeam(team){
             // update title
             let title = document.getElementById('title');
@@ -252,8 +296,12 @@
             // clear old data
             let root = document.getElementById('table-body');
             root.innerHTML = "";
+            let player = team.player;
+            if(team.orderByPoints){
+                player = processTeamPlayer(team.player);
+            }
             // generate table entries
-            team.player.forEach((element, index) => {
+            player.forEach((element, index) => {
                 let playerRole = DOMPurify.sanitize(element.role);
                 root.insertAdjacentHTML('beforeend', `
                     <tr class="tbl-row tbl-${playerRole}">
@@ -266,6 +314,9 @@
                         <td>
                             <span id="player-${index}" class="player">?</span>
                         </td>
+                        <td id="points-td-${index}">
+                            <span id="points-${index}" class="points">?</span>
+                        </td>
                     </tr>`);                    
                 let positionElement = document.getElementById(`position-${index}`);
                 positionElement.textContent = index+1;
@@ -273,9 +324,21 @@
                 playerElement.textContent = DOMPurify.sanitize(element.name);
                 let roleElement = document.getElementById(`role-${index}`);
                 roleElement.src = `assets/roles/${playerRole}.png`;
+                if(team.showPoints) {
+                    let pointsElement = document.getElementById(`points-${index}`);
+                    pointsElement.textContent = DOMPurify.sanitize(element.points);
+                } else {
+                    let pointsTdElement = document.getElementById(`points-td-${index}`);
+                    pointsTdElement.remove();
+                }
             });
             let roleElement = document.getElementById(`flag`);
             roleElement.src = `assets/flags/${team.flag}.jpg`;
+            if(!team.showPoints) {
+                let scoreHeader = document.getElementById(`score-header`);
+                if(scoreHeader)
+                    scoreHeader.remove();
+            }
         }
 
         function getIdParam(){

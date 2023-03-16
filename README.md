@@ -75,27 +75,36 @@ The team pages are also fetching data from [npoint.io](https://www.npoint.io). T
     "name": "Germany",
     // flag MUST match with the flag of the Leaderboard and is used as id
     "flag": "GER",
+    // True if the player should be auto sorted by points
+    "orderByPoints": true,
+    // True if the points should be visible
+    "showPoints": true,
     "player": [
       {
         // player name
         "name": "Player A",
         // captain of the team
         "role": "captain",
+        // How many points this player scored
+        "points": 13
       },
       {
         "name": "Player B",
         // player that has won the qualifier
         "role": "player",
+        "points": 10
       },
       {
         "name": "Player C",
         // unknown state (eg. qualifier not played)
         "role": "none",
+        "points": 5
       },
       {
         "name": "Player C",
         // player did not make the qualifier
         "role": "out",
+        "points": 3
       }
     ]
   }]
