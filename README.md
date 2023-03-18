@@ -21,7 +21,7 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
     {
       "name": "World",
       "flag": "WOR",
-      "points": 11
+      "points": [8, 1, 4]
     },
     {
       "name": "Germany",
@@ -85,8 +85,8 @@ The team pages are also fetching data from [npoint.io](https://www.npoint.io). T
         "name": "Player A",
         // captain of the team
         "role": "captain",
-        // How many points this player scored
-        "points": 13
+        // How many points this player scored (array of numbers to sum up or simple number)
+        "points": [8, 1, 4]
       },
       {
         "name": "Player B",

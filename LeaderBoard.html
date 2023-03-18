@@ -27,7 +27,7 @@
         entries: [{
             name: "World",
             flag: "WOR",
-            points: 11,
+            points: [8,4,5],
         }, {
             name: "Germany",
             flag: "GER",
@@ -247,9 +247,23 @@
             enableFetchFromUrl = false;
         }
 
+        function isArray(what) {
+            return Object.prototype.toString.call(what) === '[object Array]';
+        }
+
+        function convertPointsArrayToNumber(list){
+            list.forEach(e=>{
+                // convert array to number
+                if(isArray(e.points)){
+                    e.points = (e.points).reduce((partialSum, p) => partialSum + p, 0)
+                }
+            });
+        }
+
         function processLeaderboard(data){
             // Sort the data for points
             let leaderboard = data.filter(e=> e.points !== null && e.flag !== null )
+            convertPointsArrayToNumber(leaderboard);
             leaderboard.sort((a, b) => {
                 var pointCompare = b.points - a.points;
                 if (pointCompare != 0) {

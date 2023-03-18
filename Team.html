@@ -19,7 +19,7 @@
                 {
                     name: "Player A",
                     role: "captain",
-                    points: 13
+                    points: [8, 1, 4]
                 },
                 {
                     name: "Player B",
@@ -271,7 +271,21 @@
             return null;
         }
 
+        function isArray(what) {
+            return Object.prototype.toString.call(what) === '[object Array]';
+        }
+
+        function convertPointsArrayToNumber(list){
+            list.forEach(e=>{
+                // convert array to number
+                if(isArray(e.points)){
+                    e.points = (e.points).reduce((partialSum, p) => partialSum + p, 0)
+                }
+            });
+        }
+
         function processTeamPlayer(player){
+            convertPointsArrayToNumber(player);
             // Sort the data for points
             player.sort((a, b) => {
                 var pointCompare = b.points - a.points;
