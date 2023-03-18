@@ -18,17 +18,17 @@
             player: [
                 {
                     name: "Player A",
-                    role: "captain",
+                    role: "player",
                     points: [8, 1, 4]
                 },
                 {
                     name: "Player B",
                     role: "player",
-                    points: 13
+                    points: [7, 2, 4]
                 },
                 {
                     name: "Player C",
-                    role: "player",
+                    role: "captain",
                     points: 14
                 },
                 {
@@ -275,22 +275,30 @@
             return Object.prototype.toString.call(what) === '[object Array]';
         }
 
-        function convertPointsArrayToNumber(list){
-            list.forEach(e=>{
-                // convert array to number
-                if(isArray(e.points)){
-                    e.points = (e.points).reduce((partialSum, p) => partialSum + p, 0)
-                }
-            });
+        function pointsToSum(points){
+            if(isArray(points)){
+                return points.reduce((partialSum, p) => partialSum + p, 0)
+            }
+            return points;
+        }
+
+        function pointsToMax(points){
+            if(isArray(points)){
+                return Math.max(...points);
+            }
+            return points;
         }
 
         function processTeamPlayer(player){
-            convertPointsArrayToNumber(player);
             // Sort the data for points
             player.sort((a, b) => {
-                var pointCompare = b.points - a.points;
+                let pointCompare = pointsToSum(b.points) - pointsToSum(a.points);
                 if (pointCompare != 0) {
                     return pointCompare;
+                }
+                let maxCompare = pointsToMax(b.points) - pointsToMax(a.points);
+                if (maxCompare != 0) {
+                    return maxCompare;
                 }
                 if (a.name < b.name) {
                     return -1;
@@ -340,7 +348,7 @@
                 roleElement.src = `assets/roles/${playerRole}.png`;
                 if(team.showPoints) {
                     let pointsElement = document.getElementById(`points-${index}`);
-                    pointsElement.textContent = DOMPurify.sanitize(element.points);
+                    pointsElement.textContent = isArray(element.points) ? pointsToSum(element.points) : DOMPurify.sanitize(element.points);
                 } else {
                     let pointsTdElement = document.getElementById(`points-td-${index}`);
                     pointsTdElement.remove();
