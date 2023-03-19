@@ -50,7 +50,22 @@
     <title>RNC-Team</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
-        @import url('https://fonts.cdnfonts.com/css/soloist');
+        @font-face{
+            font-family:soloist;
+            font-style:normal;
+            font-weight:400;
+            src:local('Soloist'),
+            url(assets/fonts/Soloist-Z6M8.woff) 
+            format('woff')
+        }
+        @font-face{
+            font-family:soloist italic;
+            font-style:normal;
+            font-weight:400;
+            src:local('Soloist Italic'),
+            url(assets/fonts/SoloistItalic-p1Kr.woff) 
+            format('woff')
+        }
         :root {
             --title: rgb(194, 195, 204);
             --sub-title: rgb(123, 128, 128);
@@ -103,7 +118,7 @@
         }
 
         .background-image {
-            background-image: url('https://cdn.discordapp.com/attachments/1026210330726125748/1074484959760351262/RNC-LeaderboardBackground.png');
+            background-image: url('assets/RNC-LeaderboardBackground.png');
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center;
@@ -210,7 +225,6 @@
             white-space: nowrap;
         }
     </style>
-    <link href="https://fonts.cdnfonts.com/css/soloist" rel="stylesheet">
 </head>
 
 <body>

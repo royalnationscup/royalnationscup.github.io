@@ -115,3 +115,6 @@ The team pages are also fetching data from [npoint.io](https://www.npoint.io). T
 
 > To change the default end point edit the **href** in the `index.html`.
 > Another one is also in `LeaderBoard.html` for the team pages  
+
+## Font
+Website is using the [soloist](https://www.cdnfonts.com/soloist.font) font
