@@ -1,0 +1,52 @@
+
+
+:root {
+    --title: rgb(194, 195, 204);
+    --sub-title: rgb(123, 128, 128);
+    --primary: rgb(59, 148, 221);
+    --text: rgb(194, 195, 204);
+    --text-muted: rgb(81, 85, 85);
+    --text-dark: rgba(0, 0, 0, 0.637);
+    --box: rgba(0, 0, 0, 0.315);
+    --success: rgb(34 217 65 / 31%);
+    --success-position: rgb(0 0 0 / 64%);
+    --success-points: rgb(27 215 15 / 95%);
+    --danger-points: rgba(179, 60, 14, 0.95);
+    --danger: rgba(217, 71, 34, 0.31);
+    --warning: rgba(231, 183, 24, 0.781);
+    --button-text: rgb(31, 31, 31);
+}
+
+@font-face{
+    font-family:soloist;
+    font-style:normal;
+    font-weight:400;
+    src:local('Soloist'),
+    url(assets/fonts/Soloist-Z6M8.woff) 
+    format('woff')
+}
+
+@font-face{
+    font-family:soloist italic;
+    font-style:normal;
+    font-weight:400;
+    src:local('Soloist Italic'),
+    url(assets/fonts/SoloistItalic-p1Kr.woff) 
+    format('woff')
+}
+
+@font-face {
+    font-family: 'Nrvsbrkdwn';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Nrvsbrkdwn'), 
+    url('https://fonts.cdnfonts.com/s/23334/Nrvsbrkdwn.woff') 
+    format('woff');
+}
+
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}

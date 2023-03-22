@@ -1,0 +1,77 @@
+.table {
+    padding: 20px;
+    margin-top: 5px;
+    border-collapse: separate;
+    border-spacing: 3px;
+}
+
+th {
+    background-color: var(--box);
+    min-width: 25px;
+    border: 0px;
+    margin: 0;
+    padding: 5px;
+    font-size: 15px;
+    font-family: 'Soloist Italic', sans-serif;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+}
+
+tr {
+    background-color: var(--box);
+    margin: 10px;
+    border: 1px;
+    font-family: 'Soloist', sans-serif;
+    font-size: medium;
+    color: var(--text);
+    min-width: 200px;
+}
+
+td > span {
+    margin-left: 25px;
+    margin-right: 25px;
+    display: block;
+}
+
+.number-cell{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.score{
+    /* better readable font for numbers */
+    /* font-family: 'Nrvsbrkdwn', sans-serif !important; */
+    font-size: 17px;
+}
+
+tr.success > td > .number-cell {
+    color: var(--text-dark);
+}
+
+tr.danger > td > .number-cell {
+    color: var(--text-dark);
+}
+
+tr > td > .number-cell {
+    color: var(--text-muted);
+}
+
+tr.danger {
+    background-color: var(--danger);
+}
+
+tr > td > .score {
+    color: var(--primary);
+}
+
+tr.danger > td > .score {
+    color: var(--danger-points);
+}
+
+tr.success {
+    background-color: var(--success);
+}
+
+tr.success > td > .score  {
+    color: var(--success-points);
+}

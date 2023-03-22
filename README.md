@@ -11,12 +11,16 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 
 ```
 {
-  // changes the title of the leaderboard
+  // sets the title of the leaderboard
   "title": "Round A",
-  // applies a offset to the position
+  // sets the subtitle
+  "subtitle": "Most prestigious royal tournament",
+  // applies a offset to the position (1 means to start at position 1)
   "startPosition": 8,
-  // array of positions to display in a diffrent color
-  "successPositions": [8,9,10],
+  // array of positions to display in a green color
+  "successPositions": [8, 9, 10],
+  // array of positions to display in a red color
+  "dangerPositions": [15, 14],
   "entries": [
     {
       "name": "World",
@@ -62,8 +66,6 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 }
 ```
 
-A refresh button can be shown using `refresh=true` as url parameter
-
 
 ## Team pages
 The team pages are also fetching data from [npoint.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. Also required is a flag id to identify the team. Add eg. `id=GER` as a parameter to fetch the German team.
@@ -72,39 +74,37 @@ The team pages are also fetching data from [npoint.io](https://www.npoint.io). T
 {
   "teams": [{
     // display title
-    "name": "Germany",
+    "title": "Germany",
+    // display subtitle
+    "subtitle": "Qualifier Results",
     // flag MUST match with the flag of the Leaderboard and is used as id
     "flag": "GER",
-    // True if the player should be auto sorted by points
-    "orderByPoints": true,
-    // True if the points should be visible
-    "showPoints": true,
+    // When true the rounds get hidden
+    "hideRounds": false,
+    // Positions that get the role captain assigned
+    "captainPositions": [4],
+    // Positions that get the role player assigned
+    "playerPositions": [1,3],
+    // Positions that are out
+    "outPositions": [6,5],
     "player": [
       {
         // player name
         "name": "Player A",
-        // captain of the team
-        "role": "captain",
         // How many points this player scored (array of numbers to sum up or simple number)
-        "points": [8, 1, 4]
+        "points": [4, 3, 4]
       },
       {
         "name": "Player B",
-        // player that has won the qualifier
-        "role": "player",
-        "points": 10
+        "points": [3, 1, 2]
       },
       {
         "name": "Player C",
-        // unknown state (eg. qualifier not played)
-        "role": "none",
-        "points": 5
+        "points": [1, 3, 1]
       },
       {
         "name": "Player C",
-        // player did not make the qualifier
-        "role": "out",
-        "points": 3
+        "points": [2, 2, 3]
       }
     ]
   }]

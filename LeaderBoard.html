@@ -1,5 +1,6 @@
 <html>
 <script type="text/javascript" src="purify.min.js"></script>
+<script type="text/javascript" src="table-builder.js"></script>
 <script>
     // ===================================================================================================
     //   _____  _   _  _____            _                    _           _                         _ 
@@ -14,7 +15,7 @@
     // ============================
     // Config
     // ============================
-    var fetchIntervalInSeconds = 15; // dont make too small
+    var fetchIntervalInSeconds = 20; // dont make too small
 
     // ============================
     // Offline Leaderboard data
@@ -22,20 +23,22 @@
     // -> Gets loaded when executing html file offline
     var offlineLeaderboard = {
         title: "Leaderboard",
+        subtitle: "Most prestigious royal tournament",
         startPosition: 1,
         successPositions: [1, 2, 3],
+        dangerPositions: [6, 7, 8],
         entries: [{
             name: "World",
             flag: "WOR",
-            points: [7,5,5],
+            points: [5,6,3,2, 2],
         }, {
             name: "Germany",
             flag: "GER",
-            points: [8,4,5],
+            points: [5,6,3,2, 2],
         }, {
             name: "Austrailia",
             flag: "AUS",
-            points: 4,
+            points: [3,3,5],
         }, {
             name: "Brazil",
             flag: "BRA",
@@ -63,34 +66,9 @@
 <head>
     <title>RNC-Leaderboard</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="table.css">
     <style>
-        @font-face{
-            font-family:soloist;
-            font-style:normal;
-            font-weight:400;
-            src:local('Soloist'),
-            url(assets/fonts/Soloist-Z6M8.woff) 
-            format('woff')
-        }
-        @font-face{
-            font-family:soloist italic;
-            font-style:normal;
-            font-weight:400;
-            src:local('Soloist Italic'),
-            url(assets/fonts/SoloistItalic-p1Kr.woff) 
-            format('woff')
-        }
-        :root {
-            --title: rgb(194, 195, 204);
-            --sub-title: rgb(123, 128, 128);
-            --primary: rgb(59, 148, 221);
-            --text: rgb(194, 195, 204);
-            --text-muted: rgb(81, 85, 85);
-            --box: rgba(0, 0, 0, 0.315);
-            --success: rgb(34 217 65 / 31%);
-            --success-position: rgb(0 0 0 / 64%);
-            --success-points: rgb(27 215 15 / 95%);
-        }
         body {
             background-color: rgb(25 26 31);
         }
@@ -137,85 +115,21 @@
             min-height: 500px;
         }
 
-        .table {
-            width: 500px;
-            padding: 20px;
-            margin: 5px;
-            border-collapse: separate;
-            border-spacing: 3px;
-        }
-
-        .tbl-header {
-            background-color: var(--box);
-            margin: 10px;
-            border: 0px;
-        }
-
-        .tbl-row {
-            background-color: var(--box);
-            margin: 10px;
-            border: 1px;
-        }
-
-        .tbl-success {
-            background-color: var(--success);
-        }
-
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
-
         .flag-image {
             max-height: 3em;
             max-width: 2em;
             margin: 4px;
         }
-
-        .team {
-            font-family: 'Soloist', sans-serif;
-            font-size: medium;
-            min-width: 200px;
+        
+        .td-name > a {
+            margin-left: 15px;
+            margin-right: 15px;
             color: var(--text);
             text-decoration: none;
         }
-        
-        .team:hover {
+
+        .td-name> a:hover {
             color: var(--primary);
-        }
-
-        .points {
-            font-family: 'Soloist', sans-serif;
-            color: var(--primary)
-        }
-
-        .position {
-            font-family: 'Soloist Italic', sans-serif;
-            color: var(--text-muted);
-            margin-right: 5px;
-        }
-
-        .tbl-success > td > .position {
-            color: var(--success-position);
-        }
-
-        .tbl-success > td > .points {
-            color: var(--success-points);
-        }
-
-        .button{
-            font-family: 'Soloist Italic', sans-serif;
-            padding: 0 1.2em;
-            border-radius: 0.5em 0;
-            transform: skew(-8deg);
-            background-color: var(--box);
-            border-color: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            justify-content: center;
-            text-align: center;
-            white-space: nowrap;
         }
         [data-href] { cursor: pointer; }
     </style>
@@ -225,28 +139,11 @@
     <div id="leaderboard" class="background-image">
         <div class="center title-box">
             <h1 id="title">Leaderboard</h1>
-            <p class="subTitle"><span style="color:rgb(59, 148, 221)">RNC</span> - Most prestigious royal tournament</p>
+            <p class="subTitle"><span style="color:rgb(59, 148, 221)">RNC</span> - <span id="subtitle">Most prestigious royal tournament</span></p>
+        </div>        
+        <div id="table-socket">
+            <!-- Generated Team Player-->
         </div>
-        <table class="table center">
-            <thead>
-                <tr class="tbl-header">
-                    <th class="header">
-                    </th>
-                    <th class="header" width="1">
-                        <h2>Flag</h2>
-                    </th>
-                    <th class="header">
-                        <h2>Team</h2>
-                    </th>
-                    <th class="header">
-                        <h2>Score</h2>
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="table-body">
-                <!-- Generated Leaderboard-->
-            </tbody>
-        </table>
     </div>
     <script>
         // setup fetch URL
@@ -278,69 +175,56 @@
             }
             return points;
         }
+        
 
-        function processLeaderboard(data){
+        function buildPointCountMap(points){
+            let pointMap = new Map();
+            points.forEach(p=>{
+                if(!pointMap.has(p)) {
+                    pointMap.set(p, 1);
+                } else {
+                    pointMap.set(p, pointMap.get(p)+1);
+                }
+            })
+            return pointMap;
+        }
+
+        function comparePoints(a, b){
+            let pointCompare = pointsToSum(b) - pointsToSum(a);
+            if (pointCompare != 0) {
+                return pointCompare;
+            }
+            if(isArray(a) && isArray(b)){
+                let max = Math.max(pointsToMax(a), pointsToMax(b));
+                let aMap = buildPointCountMap(a);
+                let bMap = buildPointCountMap(b);
+                for(let i = max;i>0;i--){
+                    let aCount = aMap.has(i) ? aMap.get(i) : 0;
+                    let bCount = bMap.has(i) ? bMap.get(i) : 0;
+                    let compare = bCount - aCount;
+                    if(compare != 0){
+                        return compare;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        function orderLeaderboard(leaderboard){
             // Sort the data for points
-            let leaderboard = data.filter(e=> e.points !== null && e.flag !== null );
-            leaderboard.sort((a, b) => {
-                let pointCompare = pointsToSum(b.points) - pointsToSum(a.points);
+            leaderboard.entries.sort((a, b) => {
+                let pointCompare = comparePoints(a.points,b.points);
                 if (pointCompare != 0) {
                     return pointCompare;
                 }
-                let maxCompare = pointsToMax(b.points) - pointsToMax(a.points);
-                if (maxCompare != 0) {
-                    return maxCompare;
-                }
-                if (a.name < b.name) {
-                    return -1;
-                }
-                if (a.name > b.name) {
-                    return 1;
+                let max = Math.max(pointsToMax(a), pointsToMax(b));
+                if(isArray(a.points) && isArray(b.points) && max > 0){
+                    a.hasTie = true;
+                    b.hasTie = true;
                 }
                 return 0;
             });
             return leaderboard;
-        }
-
-        function renderLeaderboard(leaderboard){
-            let entries = processLeaderboard(leaderboard.entries);
-            // update title
-            let title = document.getElementById('title');
-            title.textContent = leaderboard.title;
-            // clear old data
-            let root = document.getElementById('table-body');
-            root.innerHTML = "";
-            // generate table entries
-            entries.forEach((element, index) => {
-                let position = leaderboard.startPosition + index;
-                let success = leaderboard.successPositions.includes(position);
-                root.insertAdjacentHTML('beforeend', `
-                    <tr class="tbl-row ${success ? "tbl-success":""}">
-                        <td>
-                            <span id="position-${index}" class="position">?</span>
-                        </td>
-                        <td>
-                            <img id="flag-${index}" class="flag-image" onerror="this.src='assets/kekw.jpg'">
-                        </td>
-                        <td>
-                            <a id="team-${index}" class="team">?</a>
-                        </td>
-                        <td>
-                            <span id="points-${index}" class="points">?</span>
-                        </td>
-                    </tr>`);                    
-                let flag = DOMPurify.sanitize(element.flag);
-                let teamPageHref = "Team.html?npoint=aaaace5283878339fd4e&id="+flag;
-                let positionElement = document.getElementById(`position-${index}`);
-                positionElement.textContent = DOMPurify.sanitize(position);
-                let teamElement = document.getElementById(`team-${index}`);
-                teamElement.textContent = DOMPurify.sanitize(element.name);
-                teamElement.href = teamPageHref;
-                let pointsElement = document.getElementById(`points-${index}`);
-                pointsElement.textContent = isArray(element.points) ? pointsToSum(element.points) : DOMPurify.sanitize(element.points);
-                let flagElement = document.getElementById(`flag-${index}`);
-                flagElement.src = `assets/flags/${flag}.jpg`;
-            });
         }
 
         async function fetchAndRenderLeaderboardAsync () {
@@ -370,6 +254,117 @@
             autoUpdateLoop();
         } else {
             renderLeaderboard(offlineLeaderboard);
+        }
+
+        function renderFlag(key, value, cell) {
+            let flag = DOMPurify.sanitize(value);
+            let element = document.createElement("img");
+            element.className = "table-cell flag-image"
+            element.onerror = ()=>element.src='assets/kekw.jpg';
+            element.src = `assets/flags/${flag}.jpg`;
+            cell.appendChild(element);
+        }
+
+        function renderScore(key, value, cell) {
+            let element = document.createElement("span");
+            element.className = "table-cell score";
+            element.textContent = value;
+            cell.appendChild(element);
+        }
+        
+        function renderPosition(key, value, cell) {
+            let span = document.createElement("span");
+            span.className = "table-cell number-cell";
+            span.textContent = !isNaN(value) ? value : "⚠️";
+            cell.appendChild(span);
+        }
+
+        function renderName(key, value, cell, row) {
+            let flag = DOMPurify.sanitize(row.get("flag"));
+            let element = document.createElement("a");
+            element.className = "table-cell";
+            element.textContent = DOMPurify.sanitize(value);
+            element.href = "Team.html?npoint=aaaace5283878339fd4e&id="+flag;
+            cell.appendChild(element);
+        }
+
+        function renderDefault(key, value, cell) {
+            let span = document.createElement("span");
+            span.className = "table-cell " + (isNaN(value) && value != null ? "" : "number-cell");
+            span.textContent = value;
+            cell.appendChild(span);
+        }
+
+        function renderLeaderboard(leaderboard){
+            // update title
+            let title = document.getElementById('title');
+            title.textContent = leaderboard.title;
+            if(title.subtitle){
+                let subtitle = document.getElementById('subtitle');
+                subtitle.textContent = leaderboard.subtitle;
+            }
+            // clear old data
+            let root = document.getElementById('table-socket');
+            root.innerHTML = "";
+            orderLeaderboard(leaderboard);
+            
+            buildTable(leaderboard);
+        }
+
+        function buildTableData(leaderboard){
+            let data = leaderboard.entries.map((entry, index) => {
+                let data = new Map();
+                let rowClass = null;
+                let position = index+(leaderboard.startPosition||1);
+                if(entry.hasTie){
+                    data.set("", "tie");
+                } else {
+                    data.set("", position);
+                }
+                data.set("flag", entry.flag);
+                data.set("name", entry.name);
+                if(leaderboard.successPositions && leaderboard.successPositions.indexOf(position) >= 0){
+                    rowClass = "success";
+                }
+                if(leaderboard.dangerPositions && leaderboard.dangerPositions.indexOf(position) >= 0){
+                    rowClass = "danger";
+                }
+                if(isArray(entry.points)){
+                    entry.points.forEach((p, i) => {
+                        data.set(` ${i+1} `, p || " ");
+                    });
+                }
+                if(entry.points !== null){
+                    data.set("score", pointsToSum(entry.points));
+                }
+
+                return {
+                    cells: data,
+                    rowClass: rowClass,
+                };
+            });
+            return data;
+        }
+
+        function buildTable(leaderboard) {
+            let data = buildTableData(leaderboard);
+            let table = TableBuilder.build(data, (key, value, cell, row) => {
+                if(key === "flag"){
+                    renderFlag(key, value, cell);
+                } else if(key === "score"){
+                    renderScore(key, value, cell);
+                } else if(key === "name"){
+                    renderName(key, value, cell, row);
+                } else if(key === ""){
+                    renderPosition(key, value, cell, row);
+                } else {
+                    renderDefault(key, value, cell);
+                }
+            });
+            table.className = "table center"
+            // Append the table to the document body
+            let tableParent = document.getElementById("table-socket")
+            tableParent.appendChild(table);
         }
     </script>
 </body>

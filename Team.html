@@ -1,10 +1,11 @@
 <html>
 <script type="text/javascript" src="purify.min.js"></script>
+<script type="text/javascript" src="table-builder.js"></script>
 <script>
     // ============================
     // Config
     // ============================
-    var fetchIntervalInSeconds = 15; // dont make too small
+    var fetchIntervalInSeconds = 20; // dont make too small
     // ============================
     // Offline Team data
     // ============================
@@ -12,34 +13,35 @@
     var offlineTeams = {
         teams: [{
             name: "Germany",
+            description: "Qualifier Results",
             flag: "GER",
-            orderByPoints: true,
-            showPoints: true,
+            hideRounds: false, // remove (?)
+            assignRoles: true,
             player: [
                 {
-                    name: "Player A",
-                    role: "player",
-                    points: [8, 1, 4]
+                    name: "ASombozz",
+                    points: [8, 7, 5, 6]
                 },
                 {
-                    name: "Player B",
-                    role: "player",
-                    points: [7, 2, 4]
+                    name: "BLars",
+                    points: [8, 7, 7, 4]
                 },
                 {
-                    name: "Player C",
+                    name: "Marius",
+                    points: [2, 6, 4, 7]
+                },
+                {
+                    name: "Surgetale",
+                    points: [6, 3, 4, 6]
+                },
+                {
+                    name: "Maverick",
                     role: "captain",
-                    points: 14
+                    points: [3, 6, 6, 4]
                 },
                 {
-                    name: "Player C",
-                    role: "none",
-                    points: 9
-                },
-                {
-                    name: "Player D",
-                    role: "out",
-                    points: 5
+                    name: "Dog",
+                    points: [8, 4, 5, 1]
                 }
             ],
         }]
@@ -49,36 +51,9 @@
 <head>
     <title>RNC-Team</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="table.css">
     <style>
-        @font-face{
-            font-family:soloist;
-            font-style:normal;
-            font-weight:400;
-            src:local('Soloist'),
-            url(assets/fonts/Soloist-Z6M8.woff) 
-            format('woff')
-        }
-        @font-face{
-            font-family:soloist italic;
-            font-style:normal;
-            font-weight:400;
-            src:local('Soloist Italic'),
-            url(assets/fonts/SoloistItalic-p1Kr.woff) 
-            format('woff')
-        }
-        :root {
-            --title: rgb(194, 195, 204);
-            --sub-title: rgb(123, 128, 128);
-            --primary: rgb(59, 148, 221);
-            --text: rgb(194, 195, 204);
-            --text-muted: rgb(81, 85, 85);
-            --box: rgba(0, 0, 0, 0.315);
-            --success: rgb(34 217 65 / 31%);
-            --success-position: rgb(0 0 0 / 64%);
-            --success-points: rgb(27 215 15 / 95%);
-            --danger-points: rgba(179, 60, 14, 0.95);
-            --danger: rgba(217, 71, 34, 0.31);
-        }
         body {
             background-color: rgb(25 26 31);
         }
@@ -127,38 +102,8 @@
             min-height: 500px;
         }
 
-        .table {
-            width: 450px;
-            padding: 20px;
-            margin: 5px;
-            border-collapse: separate;
-            border-spacing: 3px;
-        }
-
-        .tbl-header {
-            background-color: var(--box);
-            margin: 10px;
-            border: 0px;
-        }
-
-        .tbl-row {
-            background-color: var(--box);
-            margin: 10px;
-            border: 1px;
-        }
-
-        .tbl-captain, .tbl-player {
-            background-color: var(--success);
-        }
-
-        .tbl-out {
-            background-color: var(--danger);
-        }
-
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
+        .td-tie {
+            color: var(--warning);
         }
 
         .role-image {
@@ -167,103 +112,33 @@
             margin: 4px;
         }
 
-        .player {
-            font-family: 'Soloist', sans-serif;
-            font-size: medium;
-            min-width: 200px;
-            color: var(--text);
-        }
-
-        .position {
-            font-family: 'Soloist Italic', sans-serif;
-            color: var(--text-muted);
-            margin-right: 5px;
-        }
-
-        .tbl-player > td > .position {
-            color: var(--success-position);
-        }
-        .tbl-captain > td > .position {
-            color: var(--success-position);
-        }
-        .tbl-out > td > .position {
-            color: var(--success-position);
-        }
-
-        .points {
-            font-family: 'Soloist', sans-serif;
-            color: var(--primary)
-        }
-
-        .tbl-captain > td > .points {
-            color: var(--success-points);
-        }
-        .tbl-player > td > .points {
-            color: var(--success-points);
-        }
-        .tbl-out > td > .points {
-            color: var(--danger-points);
-        }
-
         .flag-image {
             max-height: 9em;
             max-width: 6em;
             margin: 4px;
         }
-
-        .button{
-            font-family: 'Soloist Italic', sans-serif;
-            padding: 0 1.2em;
-            border-radius: 0.5em 0;
-            transform: skew(-8deg);
-            background-color: var(--box);
-            border-color: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            justify-content: center;
-            text-align: center;
-            white-space: nowrap;
-        }
     </style>
 </head>
-
 <body>
     <div class="background-image">
         <div class="center title-box">
             <table>
-                <tr>
+                <tr style="background:transparent">
                     <td>
                         <img id="flag" class="flag-image" onerror="this.src='assets/kekw.jpg'">
                     </td>
                     <td>
                         <h1 id="title">...</h1>
-                        <p class="subTitle"><span style="color:rgb(59, 148, 221)">RNC</span> - Qualifier Results</p>
+                        <p class="subTitle"><span style="color:rgb(59, 148, 221)">RNC</span> - <span id="subtitle">Qualifier Results</span></p>
                     </td>
                 </tr>
             </table>
         </div>
-        <table class="table center">
-            <thead>
-                <tr id="tbl-header" class="tbl-header">
-                    <th class="header" style="width: 2em;">
-                    </th>
-                    <th class="header" style="width: 4.5em;">
-                        <h2>Role</h2>
-                    </th>
-                    <th class="header">
-                        <h2>Player</h2>
-                    </th>
-                    <th id="score-header" style="width: 5em;" class="header">
-                        <h2>Score</h2>
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="table-body">
-                <!-- Generated Team Player-->
-            </tbody>
-        </table>
+        <div id="table-socket">
+            <!-- Generated Team Player-->
+        </div>
     </div>
-    <script>
+    <script type="text/javascript">
         // setup fetch URL
         function buildNpointUrl(){
             const queryString = window.location.search;
@@ -303,78 +178,54 @@
             return points;
         }
 
+        function buildPointCountMap(points){
+            let pointMap = new Map();
+            points.forEach(p=>{
+                if(!pointMap.has(p)) {
+                    pointMap.set(p, 1);
+                } else {
+                    pointMap.set(p, pointMap.get(p)+1);
+                }
+            })
+            return pointMap;
+        }
+
+        function comparePoints(a, b){
+            let pointCompare = pointsToSum(b) - pointsToSum(a);
+            if (pointCompare != 0) {
+                return pointCompare;
+            }
+            if(isArray(a) && isArray(b)){
+                let max = Math.max(pointsToMax(a), pointsToMax(b));
+                let aMap = buildPointCountMap(a);
+                let bMap = buildPointCountMap(b);
+                for(let i = max;i>0;i--){
+                    let aCount = aMap.has(i) ? aMap.get(i) : 0;
+                    let bCount = bMap.has(i) ? bMap.get(i) : 0;
+                    let compare = bCount - aCount;
+                    if(compare != 0){
+                        return compare;
+                    }
+                }
+            }
+            return 0;
+        }
+
         function processTeamPlayer(player){
             // Sort the data for points
             player.sort((a, b) => {
-                let pointCompare = pointsToSum(b.points) - pointsToSum(a.points);
+                let pointCompare = comparePoints(a.points, b.points);
                 if (pointCompare != 0) {
                     return pointCompare;
                 }
-                let maxCompare = pointsToMax(b.points) - pointsToMax(a.points);
-                if (maxCompare != 0) {
-                    return maxCompare;
-                }
-                if (a.name < b.name) {
-                    return -1;
-                }
-                if (a.name > b.name) {
-                    return 1;
+                let max = Math.max(pointsToMax(a), pointsToMax(b));
+                if(isArray(a.points) && isArray(b.points) && max > 0){
+                    a.hasTie = true;
+                    b.hasTie = true;
                 }
                 return 0;
             });
             return player;
-        }
-
-        function renderTeam(team){
-            // update title
-            let title = document.getElementById('title');
-            title.textContent = team.name;
-            // clear old data
-            let root = document.getElementById('table-body');
-            root.innerHTML = "";
-            let player = team.player;
-            if(team.orderByPoints){
-                player = processTeamPlayer(team.player);
-            }
-            // generate table entries
-            player.forEach((element, index) => {
-                let playerRole = DOMPurify.sanitize(element.role);
-                root.insertAdjacentHTML('beforeend', `
-                    <tr class="tbl-row tbl-${playerRole}">
-                        <td>
-                            <span id="position-${index}" class="position">?</span>
-                        </td>
-                        <td>
-                            <img id="role-${index}" class="role-image" onerror="this.src='assets/kekw.jpg'">
-                        </td>
-                        <td>
-                            <span id="player-${index}" class="player">?</span>
-                        </td>
-                        <td id="points-td-${index}">
-                            <span id="points-${index}" class="points">?</span>
-                        </td>
-                    </tr>`);                    
-                let positionElement = document.getElementById(`position-${index}`);
-                positionElement.textContent = index+1;
-                let playerElement = document.getElementById(`player-${index}`);
-                playerElement.textContent = DOMPurify.sanitize(element.name);
-                let roleElement = document.getElementById(`role-${index}`);
-                roleElement.src = `assets/roles/${playerRole}.png`;
-                if(team.showPoints) {
-                    let pointsElement = document.getElementById(`points-${index}`);
-                    pointsElement.textContent = isArray(element.points) ? pointsToSum(element.points) : DOMPurify.sanitize(element.points);
-                } else {
-                    let pointsTdElement = document.getElementById(`points-td-${index}`);
-                    pointsTdElement.remove();
-                }
-            });
-            let roleElement = document.getElementById(`flag`);
-            roleElement.src = `assets/flags/${team.flag}.jpg`;
-            if(!team.showPoints) {
-                let scoreHeader = document.getElementById(`score-header`);
-                if(scoreHeader)
-                    scoreHeader.remove();
-            }
         }
 
         function getIdParam(){
@@ -404,6 +255,122 @@
             autoUpdateLoop();
         } else {
             renderTeam(offlineTeams.teams[0]);
+        }
+
+        function renderRole(key, value, cell) {
+            let element = document.createElement("img");
+            element.className = "table-cell role-image"
+            element.onerror = ()=>element.src='assets/kekw.jpg';
+            element.src = `assets/roles/${value}.png`;
+            cell.appendChild(element);
+        }
+        
+        function renderScore(key, value, cell) {
+            let span = document.createElement("span");
+            span.className = "table-cell score";
+            span.textContent = (value && value > 0) ? value : "";
+            cell.appendChild(span);
+        }
+        
+        function renderPosition(key, value, cell) {
+            let span = document.createElement("span");
+            span.className = "table-cell number-cell";
+            span.textContent = !isNaN(value) ? value : "⚠️";
+            cell.appendChild(span);
+        }
+
+        function renderName(key, value, cell) {
+            let span = document.createElement("span");
+            span.className = "table-cell";
+            span.textContent = value;
+            cell.appendChild(span);
+        }
+
+        function renderDefault(key, value, cell) {
+            let span = document.createElement("span");
+            span.className = "table-cell " + (isNaN(value) && value != null ? "" : "number-cell");
+            span.textContent = value;
+            cell.appendChild(span);
+        }
+
+        function renderTeam(team){
+            // update title and subtitle
+            let title = document.getElementById('title');
+            title.textContent = team.name;
+            if(team.description){
+                let subtitle = document.getElementById('subtitle');
+                subtitle.textContent = team.description;
+            }
+            // clear old data
+            let root = document.getElementById('table-socket');
+            root.innerHTML = "";
+            let player = team.player;
+            player = processTeamPlayer(team.player);
+
+            buildTable(team);
+            // update Flag
+            let roleElement = document.getElementById(`flag`);
+            roleElement.src = `assets/flags/${team.flag}.jpg`;
+        }
+
+        function buildTableData(team){
+            return team.player.map((player, index) => {
+                let data = new Map();
+                let rowClass = null;
+                let position = index+1;
+                if(player.hasTie){
+                    data.set("", "tie");
+                } else {
+                    data.set("", position);
+                }
+                let role = "none"
+                if(team.assignRoles){
+                    if((player.role && player.role === "player") || (!player.role && [1, 2].includes(index))){
+                        rowClass = "success";
+                        role = "player"
+                    } else if((player.role && player.role === "captain") || (!player.role && index==0)){
+                        rowClass = "success";
+                        role = "captain"
+                    } else if((player.role && player.role === "out") || (!player.role && index > 2)){
+                        rowClass = "danger";
+                        role = "out"
+                    }
+                }
+                data.set("role", role);
+                data.set("player", player.name);
+                if(isArray(player.points) && !team.hideRounds){
+                    player.points.forEach((p, i) => {
+                        data.set(` ${i+1} `, p || " ");
+                    });
+                }
+                data.set("score", pointsToSum(player.points));
+                
+                return {
+                    cells: data,
+                    rowClass: rowClass,
+                };
+            });
+        }
+
+        function buildTable(team) {
+            let data = buildTableData(team);
+            let table = TableBuilder.build(data, (key, value, cell) => {
+                if(key === "role"){
+                    renderRole(key, value, cell);
+                } else if(key === "score"){
+                    renderScore(key, value, cell);
+                } else if(key === ""){
+                    renderPosition(key, value, cell);
+                }else if(key === "player"){
+                    renderName(key, value, cell);
+                } else {
+                    renderDefault(key, value, cell);
+                }
+            });
+            table.className = "table center"
+            // Append the table to the document body
+            let tableParent = document.getElementById("table-socket")
+            tableParent.appendChild(table);
         }
     </script>
 </body>
