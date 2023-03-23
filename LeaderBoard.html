@@ -24,42 +24,48 @@
     var offlineLeaderboard = {
         title: "Leaderboard",
         subtitle: "Most prestigious royal tournament",
-        startPosition: 1,
-        successPositions: [1, 2, 3],
-        dangerPositions: [6, 7, 8],
-        entries: [{
-            name: "World",
-            flag: "WOR",
-            points: [5,6,3,2, 2],
-        }, {
-            name: "Germany",
-            flag: "GER",
-            points: [5,6,3,2, 2],
-        }, {
-            name: "Austrailia",
-            flag: "AUS",
-            points: [3,3,5],
-        }, {
-            name: "Brazil",
-            flag: "BRA",
-            points: 3,
-        }, {
-            name: "Canada",
-            flag: "CAN",
-            points: 10,
-        }, {
-            name: "France",
-            flag: "FRA",
-            points: 9,
-        }, {
-            name: "United States",
-            flag: "USA",
-            points: 5,
-        }, {
-            name: "United Kingdom",
-            flag: "GBR",
-            points: 9,
-        }]
+        groups: [
+            {
+                title: "",
+                startPosition: 1,
+                successPositions: [1, 2, 3],
+                dangerPositions: [6, 7, 8],
+                kiraMode: false,
+                entries: [{
+                    name: "World",
+                    flag: "WOR",
+                    points: [5,6,3,2, 2],
+                }, {
+                    name: "Germany",
+                    flag: "GER",
+                    points: [5,6,3,2, 2],
+                }, {
+                    name: "Austrailia",
+                    flag: "AUS",
+                    points: [3,3,5],
+                }, {
+                    name: "Brazil",
+                    flag: "BRA",
+                    points: 3,
+                }, {
+                    name: "Canada",
+                    flag: "CAN",
+                    points: 10,
+                }, {
+                    name: "France",
+                    flag: "FRA",
+                    points: 9,
+                }, {
+                    name: "United States",
+                    flag: "USA",
+                    points: 5,
+                }, {
+                    name: "United Kingdom",
+                    flag: "GBR",
+                    points: 9,
+                }]
+            }
+        ]
     };
 </script>
 
@@ -120,12 +126,46 @@
             max-width: 2em;
             margin: 4px;
         }
+
+        .table-socket > tr > table {
+            flex-grow: 1;
+        }
+
+        .table-socket > tr {
+            font-size: 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .table-socket > .borderless {
+            background-color: transparent;
+        }
+
+        .table-socket > .borderless > table {
+            padding: 0px;
+        }
+
+        .table-group-caption {
+            background-color: var(--box);
+            color: var(--sub-title);
+            padding: 5px;
+            font-size: 17px;
+            font-family: 'Soloist Italic', sans-serif;
+            margin-bottom: -10;
+            margin-top: -5;
+        }
         
         .td-name > a {
             margin-left: 15px;
             margin-right: 15px;
             color: var(--text);
             text-decoration: none;
+        }
+
+        .kira-star {
+            margin-left: 10px;
+            margin-right: 10px;
         }
 
         .td-name> a:hover {
@@ -141,9 +181,9 @@
             <h1 id="title">Leaderboard</h1>
             <p class="subTitle"><span style="color:rgb(59, 148, 221)">RNC</span> - <span id="subtitle">Most prestigious royal tournament</span></p>
         </div>        
-        <div id="table-socket">
+        <table id="table-socket" class="table-socket center">
             <!-- Generated Team Player-->
-        </div>
+        </table>
     </div>
     <script>
         // setup fetch URL
@@ -217,7 +257,7 @@
                 if (pointCompare != 0) {
                     return pointCompare;
                 }
-                let max = Math.max(pointsToMax(a), pointsToMax(b));
+                let max = Math.max(pointsToMax(a.points), pointsToMax(b.points));
                 if(isArray(a.points) && isArray(b.points) && max > 0){
                     a.hasTie = true;
                     b.hasTie = true;
@@ -288,10 +328,17 @@
             cell.appendChild(element);
         }
 
-        function renderDefault(key, value, cell) {
+        function renderRoundPoint(key, value, cell) {
             let span = document.createElement("span");
             span.className = "table-cell " + (isNaN(value) && value != null ? "" : "number-cell");
             span.textContent = value;
+            cell.appendChild(span);
+        }
+
+        function renderRoundStar(key, value, cell) {
+            let span = document.createElement("span");
+            span.className = "table-cell kira-star";
+            span.textContent = value > 0 ? "⭐" : "";
             cell.appendChild(span);
         }
 
@@ -304,11 +351,24 @@
                 subtitle.textContent = leaderboard.subtitle;
             }
             // clear old data
-            let root = document.getElementById('table-socket');
-            root.innerHTML = "";
-            orderLeaderboard(leaderboard);
-            
-            buildTable(leaderboard);
+            let socket = document.getElementById('table-socket');
+            socket.innerHTML = "";
+            for(let group of leaderboard.groups){
+                orderLeaderboard(group);                
+                let table = buildTable(group);
+                if(group.title){
+                    let caption = document.createElement('caption');
+                    caption.className = "table-group-caption"
+                    caption.textContent = group.title;
+                    table.appendChild(caption);
+                }                
+                let container = document.createElement('tr');
+                if(!group.title){
+                    container.className = "borderless"
+                }
+                container.appendChild(table);
+                socket.appendChild(container);
+            }
         }
 
         function buildTableData(leaderboard){
@@ -358,13 +418,15 @@
                 } else if(key === ""){
                     renderPosition(key, value, cell, row);
                 } else {
-                    renderDefault(key, value, cell);
+                    if(leaderboard.kiraMode) {
+                        renderRoundStar(key, value, cell);
+                    } else {
+                        renderRoundPoint(key, value, cell);
+                    }
                 }
             });
             table.className = "table center"
-            // Append the table to the document body
-            let tableParent = document.getElementById("table-socket")
-            tableParent.appendChild(table);
+            return table
         }
     </script>
 </body>

@@ -9,63 +9,141 @@ Flags are from Nado and can be found at `assets/flags`. They should probably fol
 ## Leaderboard
 The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. So for example `&npoint=efc43aed2665ee53a7d6` will fetch from `https://api.npoint.io/efc43aed2665ee53a7d6`.
 
+
+### Global Rank example:
+
+{
+   // Title will showw in a box above the leaderboard
+   "title": "Global Rank",
+   "subtitle": "Most prestigious royal tournament",
+   // Leaderboard can consist of more sub-leaderboards or groups
+   "groups": [
+      {
+         // When setting a title a box with the title will appear around the table
+         "title": "",
+         // applies a offset to the position (1 means to start at position 1)
+         "startPosition": 1,
+         // array of positions to display in a green color
+         "successPositions": [1, 2, 3],
+         // array of positions to display in a red color
+         "dangerPositions": [],
+         "kiraMode": false,
+         "entries": [
+            {
+               "name": "World",
+               "flag": "WOR",
+               "points": 10
+            },
+            {
+               "name": "Germany",
+               "flag": "GER",
+               "points": 12
+            },
+            {
+               "name": "Austrailia",
+               "flag": "AUS",
+               "points": 5
+            },
+            {
+               "name": "Brazil",
+               "flag": "BRA",
+               "points": 3
+            },
+            {
+               "name": "Canada",
+               "flag": "CAN",
+               "points": 10
+            },
+            {
+               "name": "France",
+               "flag": "FRA",
+               "points": 9
+            },
+            {
+               "name": "United States",
+               "flag": "USA",
+               "points": 5
+            },
+            {
+               "name": "United Kingdom",
+               "flag": "GBR",
+               "points": 9
+            }
+         ]
+      }
+   ]
+}
+
+### Group Stage example:
+
 ```
 {
-  // sets the title of the leaderboard
-  "title": "Round A",
-  // sets the subtitle
-  "subtitle": "Most prestigious royal tournament",
-  // applies a offset to the position (1 means to start at position 1)
-  "startPosition": 8,
-  // array of positions to display in a green color
-  "successPositions": [8, 9, 10],
-  // array of positions to display in a red color
-  "dangerPositions": [15, 14],
-  "entries": [
-    {
-      "name": "World",
-      "flag": "WOR",
-      "points": [8, 1, 4]
-    },
-    {
-      "name": "Germany",
-      "flag": "GER",
-      "points": 12
-    },
-    {
-      "name": "Austrailia",
-      "flag": "AUS",
-      "points": 4
-    },
-    {
-      "name": "Brazil",
-      "flag": "BRA",
-      "points": 3
-    },
-    {
-      "name": "Canada",
-      "flag": "CAN",
-      "points": 10
-    },
-    {
-      "name": "France",
-      "flag": "FRA",
-      "points": 9
-    },
-    {
-      "name": "United States",
-      "flag": "USA",
-      "points": 9
-    },
-    {
-      "name": "United Kingdom",
-      "flag": "GBR",
-      "points": 9
-    }
-  ]
+   "title": "Group Stage",
+   "subtitle": "Most prestigious royal tournament",
+   "groups": [
+      {
+         "title": "Group A",
+         "startPosition": 1,
+         "successPositions": [],
+         "dangerPositions": [],
+         "kiraMode": false,
+         "entries": [
+            {
+               "name": "World",
+               "flag": "WOR",
+               "points": [1, 4, 4, 2, 0]
+            },
+            {
+               "name": "Germany",
+               "flag": "GER",
+               "points": [3, 3, 3, 4, 0]
+            },
+            {
+               "name": "Austrailia",
+               "flag": "AUS",
+               "points": [2, 2, 1, 3, 0]
+            },
+            {
+               "name": "Brazil",
+               "flag": "BRA",
+               "points": [4, 1, 2, 2, 0]
+            }
+         ]
+      }
+   ]
 }
 ```
 
+### Knockout example:
+
+```
+{
+   "title": "knockout stage",
+   "subtitle": "Most prestigious royal tournament",
+   "groups": [
+      {
+         "title": "",
+         "startPosition": 1,
+         "successPositions": [1],
+         "dangerPositions": [2],
+         // Kira mode will turn all points into stars when greater 0
+         "kiraMode": true,
+         "entries": [
+            {
+               "name": "World",
+               "flag": "WOR",
+               "points": [1, 0, 1, 1, 0, 0, 1],
+            },
+            {
+               "name": "Germany",
+               "flag": "GER",
+               "points": [0, 1, 0, 0, 1, 1, 0],
+            }
+         ]
+      }
+   ]
+}
+```
 
 ## Team pages
 The team pages are also fetching data from [npoint.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. Also required is a flag id to identify the team. Add eg. `id=GER` as a parameter to fetch the German team.
