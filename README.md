@@ -12,6 +12,9 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 
 ### Global Rank example:
 
+![GlobalRank](examples/GlobalRank.png)
+
+```
 {
    // Title will showw in a box above the leaderboard
    "title": "Global Rank",
@@ -73,8 +76,11 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
       }
    ]
 }
+```
 
 ### Group Stage example:
+
+![KnockoutStage](examples/GroupStage.png)
 
 ```
 {
@@ -116,6 +122,8 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 
 ### Knockout example:
 
+![KnockoutStage](examples/KnockoutStage.png)
+
 ```
 {
    "title": "knockout stage",
@@ -145,8 +153,11 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 }
 ```
 
+
 ## Team pages
 The team pages are also fetching data from [npoint.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. Also required is a flag id to identify the team. Add eg. `id=GER` as a parameter to fetch the German team.
+
+![KnockoutStage](examples/Teams.png)
 
 ```
 {
