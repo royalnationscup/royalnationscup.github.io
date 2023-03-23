@@ -81,29 +81,28 @@ The team pages are also fetching data from [npoint.io](https://www.npoint.io). T
     "flag": "GER",
     // When true the rounds get hidden
     "hideRounds": false,
-    // Positions that get the role captain assigned
-    "captainPositions": [4],
-    // Positions that get the role player assigned
-    "playerPositions": [1,3],
-    // Positions that are out
-    "outPositions": [6,5],
+    // If the auto or manually assigned roles should show
+    "assignRoles": true,
     "player": [
       {
         // player name
         "name": "Player A",
         // How many points this player scored (array of numbers to sum up or simple number)
-        "points": [4, 3, 4]
+        "points": [4, 3, 4],
+        // player with most points so he will be captain (1=captain 2-3=player others out)
       },
       {
         "name": "Player B",
-        "points": [3, 1, 2]
+        "points": [3, 1, 2],
+        // optional parameter that lets you override the auto assigned roles ("out", "player", "captain", "none")
+        "role": "out"
       },
       {
         "name": "Player C",
-        "points": [1, 3, 1]
+        "points": [1, 3, 1],
       },
       {
-        "name": "Player C",
+        "name": "Player D",
         "points": [2, 2, 3]
       }
     ]
