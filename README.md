@@ -153,6 +153,43 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 }
 ```
 
+### Tiebreaker example:
+
+With the exact same points there will be a tie to break. Example:
+
+```
+   {
+      "name": "World",
+      "flag": "WOR",
+      "points": [5,6,3,2, 2]
+   }, {
+      "name": "Germany",
+      "flag": "GER",
+      "points": [5,6,3,2, 2]
+   }
+```
+
+![Tie](examples/Tiebreaker1.png)
+
+
+To resolve this add a new property tiebreaker. In this example Germany won over world:
+
+```
+   {
+      "name": "World",
+      "flag": "WOR",
+      "points": [5,6,3,2, 2],
+      "tiebreaker": 1
+   }, {
+      "name": "Germany",
+      "flag": "GER",
+      "points": [5,6,3,2, 2],
+      "tiebreaker": 2
+   }
+```
+(Same is possible with the Team pages as well)
+
+![TieResolved](examples/Tiebreaker2.png)
 
 ## Team pages
 The team pages are also fetching data from [npoint.io](https://www.npoint.io). To fetch from a specific endpoint add a `npoint` url parameter with the value of the npoint id. Also required is a flag id to identify the team. Add eg. `id=GER` as a parameter to fetch the German team.

@@ -24,7 +24,7 @@
                 },
                 {
                     name: "Lars",
-                    points: [8, 7, 7, 4]
+                    points: [2, 6, 4, 7]
                 },
                 {
                     name: "Marius",
@@ -37,7 +37,7 @@
                 {
                     name: "Maverick",
                     role: "captain",
-                    points: [3, 6, 6, 4]
+                    points: [3, 5, 6, 4]
                 },
                 {
                     name: "Dog",
@@ -218,6 +218,9 @@
                 if (pointCompare != 0) {
                     return pointCompare;
                 }
+                if(a.tiebreaker && b.tiebreaker){
+                    return comparePoints(a.tiebreaker, b.tiebreaker);
+                }
                 let max = Math.max(pointsToMax(a.points), pointsToMax(b.points));
                 if(isArray(a.points) && isArray(b.points) && max > 0){
                     a.hasTie = true;
@@ -343,8 +346,12 @@
                         data.set(` ${i+1} `, p || " ");
                     });
                 }
-                data.set("score", pointsToSum(player.points));
+                data.set("score", pointsToSum(player.points)); 
                 
+                if(player.tiebreaker){
+                    data.set("TB", pointsToSum(player.tiebreaker));
+                }
+                            
                 return {
                     cells: data,
                     rowClass: rowClass,

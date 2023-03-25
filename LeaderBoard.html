@@ -35,34 +35,12 @@
                     name: "World",
                     flag: "WOR",
                     points: [5,6,3,2, 2],
+                    tiebreaker: 1
                 }, {
                     name: "Germany",
                     flag: "GER",
                     points: [5,6,3,2, 2],
-                }, {
-                    name: "Austrailia",
-                    flag: "AUS",
-                    points: [3,3,5],
-                }, {
-                    name: "Brazil",
-                    flag: "BRA",
-                    points: 3,
-                }, {
-                    name: "Canada",
-                    flag: "CAN",
-                    points: 10,
-                }, {
-                    name: "France",
-                    flag: "FRA",
-                    points: 9,
-                }, {
-                    name: "United States",
-                    flag: "USA",
-                    points: 5,
-                }, {
-                    name: "United Kingdom",
-                    flag: "GBR",
-                    points: 9,
+                    tiebreaker: 2
                 }]
             }
         ]
@@ -257,6 +235,9 @@
                 if (pointCompare != 0) {
                     return pointCompare;
                 }
+                if(a.tiebreaker && b.tiebreaker){
+                    return comparePoints(a.tiebreaker, b.tiebreaker);
+                }
                 let max = Math.max(pointsToMax(a.points), pointsToMax(b.points));
                 if(isArray(a.points) && isArray(b.points) && max > 0){
                     a.hasTie = true;
@@ -396,6 +377,10 @@
                 }
                 if(entry.points !== null){
                     data.set("score", pointsToSum(entry.points));
+                }
+                
+                if(entry.tiebreaker){
+                    data.set("TB", pointsToSum(entry.tiebreaker));
                 }
 
                 return {
