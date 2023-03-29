@@ -24,11 +24,11 @@
                 },
                 {
                     name: "Lars",
-                    points: [2, 6, 4, 7]
+                    points: [2, 6, 4, 7],
                 },
                 {
                     name: "Marius",
-                    points: [2, 6, 4, 7]
+                    points: [2, 6, 4, 7],
                 },
                 {
                     name: "Surgetale",
@@ -218,7 +218,7 @@
                 if (pointCompare != 0) {
                     return pointCompare;
                 }
-                if(a.tiebreaker && b.tiebreaker){
+                if(a.tiebreaker || b.tiebreaker){
                     return comparePoints(a.tiebreaker, b.tiebreaker);
                 }
                 let max = Math.max(pointsToMax(a.points), pointsToMax(b.points));
