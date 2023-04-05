@@ -1,6 +1,10 @@
 # RNC - Royal Nations Cup
 
-Website to display a leaderboard for rnc.
+Website with live leaderboards for RNC, developed by Zssork
+
+## Index
+
+The index page shows allows navigating to the leaderboards. A leaderboard has to set `"enabled": true` in order to be available in the index page. Else the button will be disabled and not clickable.
 
 ## Flags
 
@@ -19,6 +23,8 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
    // Title will showw in a box above the leaderboard
    "title": "Global Rank",
    "subtitle": "Most prestigious royal tournament",
+   // if this can be accessed from the index page (opening url directly is still possible though)
+   "enabled": true,
    // Leaderboard can consist of more sub-leaderboards or groups
    "groups": [
       {
@@ -80,12 +86,13 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 
 ### Group Stage example:
 
-![KnockoutStage](examples/GroupStage.png)
+![GroupStage](examples/GroupStage.png)
 
 ```
 {
    "title": "Group Stage",
    "subtitle": "Most prestigious royal tournament",
+   "enabled": true,
    "groups": [
       {
          "title": "Group A",
@@ -128,6 +135,7 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 {
    "title": "knockout stage",
    "subtitle": "Most prestigious royal tournament",
+   "enabled": true,
    "groups": [
       {
          "title": "",
