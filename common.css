@@ -50,3 +50,7 @@
     margin-right: auto;
     text-align: center;
 }
+
+body {
+    user-select: none;
+}
