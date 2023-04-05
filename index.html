@@ -8,16 +8,21 @@
         <style>
             body {
                 background-color: rgb(25 26 31);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 90%;
             }
+
             .background-image {
                 background-image: url('assets/RNC-World-Big.jpg');
                 background-repeat: no-repeat;
                 background-size: contain;
                 background-position: center;
                 object-fit: cover;
-                padding: 100px;
                 min-height: 500px;
             }
+
             .rnc-logo-image {
                 background-image: url('assets/rnc-logo.png');
                 background-repeat: no-repeat;
@@ -25,8 +30,8 @@
                 background-position: center;
                 object-fit: cover;
                 padding: 100px;
-                margin: 100px;
             }
+            
             .slogan-image {
                 background-image: url(assets/slogan.png);
                 background-repeat: no-repeat;
@@ -36,14 +41,9 @@
                 left: 50px;
                 object-fit: cover;
                 padding: 100px;
-                /* margin: 100px; */
                 width: 100px;
             }
-            .center {
-                margin-left: auto;
-                margin-right: auto;
-                text-align: center;
-            }
+
             .button{
                 font-family: 'Soloist Italic', sans-serif;
                 padding: 0 1.2em;
@@ -55,23 +55,95 @@
                 justify-content: center;
                 text-align: center;
                 white-space: nowrap;
-                font-size: 35px;
+                font-size: 22px;
                 text-decoration: initial;
-            }
-            .button-muted {
-                background-color: rgb(62, 65, 75) !important;
-            }
-            .button > span {
-                color: var(--button-text);
-                margin: 5px;
-            }
-            .btn-group .button{
                 cursor: pointer;
-                width: 400px;
+                width: auto;
                 display: block;
                 margin-left: auto;
                 margin-right: auto;
                 margin-top: 20px;
+                display: flex;
+                flex-direction: column;
+                white-space: normal;
+            }
+
+            .button-disabled {
+                background-color: rgb(62, 65, 75) !important;
+                cursor: not-allowed;
+            }
+
+            .button > span {
+                color: var(--button-text);
+                margin: 5px;
+            }
+
+            .social-links  {
+                padding-top: 40px;
+            }
+            
+            .social-link {
+                padding-left: 20px;
+                padding-right: 20px;
+                text-decoration: initial;
+                opacity: 70%;
+            }
+
+            .social-link > img {
+                height: 30px;
+                width: 30px;
+            }
+
+            .card-title {
+                font-family: 'Soloist', sans-serif;
+                letter-spacing: 3px;
+                color: var(--title);
+                font-size: 30px;
+                margin: 5px;
+                margin-top: 0;
+            }           
+
+            .card-sub-title {
+                font-size: 14px;
+                color: var(--sub-title);
+                width: 100%;
+                font-family: 'Soloist', sans-serif;
+                margin: 0;
+            }
+            
+            .card-group {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                list-style: none;
+                padding: 0;
+            }
+
+            .card {
+                width: 350px;
+                margin: 20px;
+                background-color: rgba(0, 0, 0, 0.774);
+                border-radius: 6px;
+                box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.644);
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .button:hover {
+                background-color: #00ccff;
+            }
+
+            /* Media query for small screens */
+            @media (max-width: 600px) {
+                .card-group {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .card {
+                    width: 80%;
+                }
             }
         </style>
     </header>
@@ -81,23 +153,68 @@
             </div>
             <div class="slogan-image">
             </div>
-            <div class="center btn-group">
-                <a href="LeaderBoard.html?npoint=f965c762eb6dfc75579a" class="button">
-                    <span>Leaderboard</span>
+
+            <ul class="card-group">
+                <li class="card">
+                    <div class="container">
+                        <p class="card-title"><b>Global</b></p>
+                        <p class="card-sub-title">royal nations ranking across all tournaments</p>
+                        <a id="global-rank" class="button button-disabled">
+                            <span>Global Rank</span>
+                        </a>
+                    </div>
+                </li> 
+                <li class="card">
+                    <div class="container">
+                        <p class="card-title"><b>Main Event</b></p>
+                        <p class="card-sub-title"><span style="color:var(--primary)">8. April</span> grand final to decide the best royal nation</p>
+                        <a id="main-group" class="button button-disabled">
+                            <span>Group Stage</span>
+                        </a>
+                        <a id="main-knockout" class="button button-disabled">
+                            <span style="word-wrap: break-word;">Knockout Stage</span>
+                        </a>
+                    </div>
+                </li> 
+                <li class="card">
+                    <div class="container">
+                        <p class="card-title"><b>Qualifier</b></p>
+                        <p class="card-sub-title"><span style="color:var(--primary)">7. April</span> qualifier for the main event (excluding top 8)</p>
+                        <a id="qualifier-playoffs" class="button button-disabled">
+                            <span>Playoffs</span>
+                        </a>
+                    </div>
+                </li> 
+            </ul>
+            <div class="center social-links">
+                <a href="https://discord.gg/xzJhejaFWa" class="social-link">
+                    <img src="assets/icons/discord.png"></img>
                 </a>
-                <a href="https://discord.gg/xzJhejaFWa" class="button button-muted">
-                    <i class="fa fa-twitter"></i>
-                    <span>discord</span>
+                <a href="https://www.youtube.com/@royalnationscup/videos" class="social-link">
+                    <img src="assets/icons/youtube.png"></img>
                 </a>
-                <a href="https://www.youtube.com/@royalnationscup/videos" class="button button-muted">
-                    <i class="fa fa-twitter"></i>
-                    <span>youtube</span>
-                </a>
-                <a href="https://twitter.com/RoyalNationsCup" class="button button-muted">
-                    <i class="fa fa-twitter"></i>
-                    <span>twitter</span>
+                <a href="https://twitter.com/RoyalNationsCup" class="social-link">
+                    <img src="assets/icons/twitter.png"></img>
                 </a>
             </div>
         </div>
+        <script>
+            async function setUpButton(id, npoint){
+                let response = await fetch(`https://api.npoint.io/${npoint}/enabled`);
+                let isEnabled = await response.json();
+                let element = document.getElementById(id);
+                if(isEnabled) {
+                    element.className = "button";
+                    element.href = "LeaderBoard.html?npoint=" + npoint;
+                } else {
+                    element.className = "button button-disabled";
+                    element.href = null;
+                }
+            }
+            setUpButton("global-rank", "f965c762eb6dfc75579a");
+            setUpButton("main-group", "992c03d439ca33b1cb4b");
+            setUpButton("main-knockout", "f5a60d984521d2919119");
+            setUpButton("qualifier-playoffs", "bfe01c6b33d2b77507a4");
+        </script>
     </body>
 </html>
