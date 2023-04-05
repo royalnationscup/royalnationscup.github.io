@@ -44,6 +44,29 @@
     format('woff');
 }
 
+.home-button {
+    font-family: 'Soloist Italic', sans-serif;
+    padding: 0 1.2em;
+    border-radius: 0.5em 0;
+    transform: skew(-8deg);
+    border-color: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 20px;
+    color: rgb(51, 51, 51);
+    text-decoration: none;
+    background-color: var(--box);
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.home-button:hover {
+    background-color: var(--primary);
+    opacity: 1;
+}
 
 .center {
     margin-left: auto;
