@@ -1,10 +1,14 @@
 # RNC - Royal Nations Cup
 
-Website with live leaderboards for RNC, developed by Zssork
+Website with live leaderboards for RNC, developed by Zssork with the help of Brimarine.
 
 ## Index
 
 The index page shows allows navigating to the leaderboards. A leaderboard has to set `"enabled": true` in order to be available in the index page. Else the button will be disabled and not clickable.
+
+## Map Pool Generator
+
+A random map pool can be generated on [here](https://royalnationscup.github.io/MapPoolGenerator.html?rounds=5&matches=4). The number or matches and rounds can be configured with a query parameter. The map will be random and diffrent every time when opening the site (so the generated order cant be shard with a link at the moment)
 
 ## Flags
 
