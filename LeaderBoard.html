@@ -26,6 +26,7 @@
         "title": "Global Rank",
         "subtitle": "Most prestigious royal tournament",
         "enabled": true,
+        "linkPredictions": true,
         "groups": [
             {
                 "title": "",
@@ -82,6 +83,64 @@
                     "flag": "GBR",
                     "skin": "rabbit",
                     "points": [1, 2, 4, "TBD"]
+                    }
+                ]
+            },
+            {
+                "title": "",
+                "startPosition": 1,
+                "successPositions": [1, 2, 3],
+                "dangerPositions": [8, 7, 6],
+                "kiraMode": false,
+                "predictions": true,
+                "entries": [
+                    {
+                    "name": "World",
+                    "flag": "WOR",
+                    "skin": "dolphin",
+                    "points": [7, 1, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "Germany",
+                    "flag": "GER",
+                    "skin": "fox",
+                    "points": [8, 7, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "Austrailia",
+                    "flag": "AUS",
+                    "skin": "kangaroo",
+                    "points": [2, 4, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "Brazil",
+                    "flag": "BRA",
+                    "skin": "grasshopper",
+                    "points": [4, 8, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "Canada",
+                    "flag": "CAN",
+                    "skin": "ladybug",
+                    "points": [3, 5, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "France",
+                    "flag": "FRA",
+                    "skin": "panda",
+                    "points": [6, 3, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "United States",
+                    "flag": "USA",
+                    "skin": "zebra",
+                    "points": [5, 6, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "United Kingdom",
+                    "flag": "GBR",
+                    "skin": "rabbit",
+                    "points": [1, 2, "TBD", "TBD"]
                     }
                 ]
             }
@@ -280,17 +339,27 @@
             }
         }
 
-        function buildPrediction(leaderboard) {
-            if(leaderboard.predictions){
-                leaderboard.entries.forEach(entry=>{
+        function buildPrediction(group, leaderboard) {
+            if(group.predictions){
+                group.entries.forEach(entry=>{
                     if(isArray(entry.points)){
                         let index = entry.points.findIndex(p=>isTBD(p));
                         let prediction = 0;
-                        leaderboard.entries.forEach(e=>{
-                            if(isArray(e.points) && e.points[index] && !isNaN(e.points[index])){
-                                prediction = Math.max(prediction, e.points[index]);
-                            }
-                        });
+                        if(leaderboard.linkPredictions) {
+                            leaderboard.groups.forEach(g=>{
+                                g.entries.forEach(e=>{
+                                    if(isArray(e.points) && e.points[index] && !isNaN(e.points[index])){
+                                        prediction = Math.max(prediction, e.points[index]);
+                                    }
+                                });
+                            });
+                        } else {                            
+                            group.entries.forEach(e=>{
+                                if(isArray(e.points) && e.points[index] && !isNaN(e.points[index])){
+                                    prediction = Math.max(prediction, e.points[index]);
+                                }
+                            });
+                        }
                         // add prediction property for the next round
                         if(prediction > 0){
                             entry["pointsWithPrediction"] = entry.points.slice().map(p=>!isNaN(p) ? p : 0);
@@ -302,7 +371,7 @@
                 });
             }
             // clean up points array
-            leaderboard.entries.forEach(entry=>{
+            group.entries.forEach(entry=>{
                 // Remove all tbd from points and replace with 0
                 entry.points = isArray(entry.points) ? entry.points.map(p=>!isNaN(p) ? p : 0) : entry.points;
             });
@@ -441,7 +510,7 @@
             let socket = document.getElementById('table-socket');
             socket.innerHTML = "";
             for(let group of leaderboard.groups){
-                buildPrediction(group);
+                buildPrediction(group, leaderboard);
                 orderLeaderboard(group);                
                 let table = buildTable(group);
                 if(group.title){
