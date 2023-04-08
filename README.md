@@ -197,30 +197,33 @@ By enabeling the `"predictions"` property you can use `"TBD"` as a point value i
    "title": "With Prediction",
    "subtitle": "Most prestigious royal tournament",
    "enabled": true,
+   // allows predictions to work across all groups
+   "linkPredictions": true,
    "groups": [
       {
             "title": "",
             "startPosition": 1,
             "kiraMode": false,
+            // enables predictions for this group
             "predictions": true,
             "entries": [
                {
-               "name": "World",
-               "flag": "WOR",
-               "skin": "rabbit",
-               "points": [1, 3, "TBD", "TBD"]
+                  "name": "World",
+                  "flag": "WOR",
+                  "skin": "rabbit",
+                  "points": [1, 3, "TBD", "TBD"]
                },
                {
-               "name": "Germany",
-               "flag": "GER",
-               "skin": "octopus",
-               "points": [2, 2, "TBD", "TBD"]
+                  "name": "Germany",
+                  "flag": "GER",
+                  "skin": "octopus",
+                  "points": [2, 2, "TBD", "TBD"]
                },
                {
-               "name": "France",
-               "flag": "FRA",
-               "skin": "panda",
-               "points": [3, 1, 1, "TBD"]
+                  "name": "France",
+                  "flag": "FRA",
+                  "skin": "panda",
+                  "points": [3, 1, 1, "TBD"]
                },
             ]
       }

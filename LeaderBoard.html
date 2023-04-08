@@ -347,11 +347,13 @@
                         let prediction = 0;
                         if(leaderboard.linkPredictions) {
                             leaderboard.groups.forEach(g=>{
-                                g.entries.forEach(e=>{
-                                    if(isArray(e.points) && e.points[index] && !isNaN(e.points[index])){
-                                        prediction = Math.max(prediction, e.points[index]);
-                                    }
-                                });
+                                if(g.predictions){
+                                    g.entries.forEach(e=>{
+                                        if(isArray(e.points) && e.points[index] && !isNaN(e.points[index])){
+                                            prediction = Math.max(prediction, e.points[index]);
+                                        }
+                                    });
+                                }
                             });
                         } else {                            
                             group.entries.forEach(e=>{
