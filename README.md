@@ -165,6 +165,69 @@ The leaderboard is fetching data from [npoint.io](https://www.npoint.io). To fet
 }
 ```
 
+### Animal skin example:
+
+Skins can be added with the `"skin"` property. The names have to match with the images in `assets/animals`. Example clownfish is `clown_fish` but grasshopper is `grasshopper`.
+
+![AnimalSkin](examples/AnimalSkins.png)
+
+```
+   {
+      "name": "World",
+      "flag": "WOR",
+      "skin": "rabbit",
+      "points": [1, 2, 1, 0]
+   },
+   {
+      "name": "Germany",
+      "flag": "GER",
+      "skin": "octopus",
+      "points": [2, 1, 2, 0]
+   }
+```
+
+### Predictions example:
+
+By enabeling the `"predictions"` property you can use `"TBD"` as a point value inside the `"points"` property. `"TBD"` means the value is To-Be-Decided. With a max value of 1 existing the next value will be at least 2.
+
+![Predictions](examples/Prediction.png)
+
+```
+{
+   "title": "With Prediction",
+   "subtitle": "Most prestigious royal tournament",
+   "enabled": true,
+   "groups": [
+      {
+            "title": "",
+            "startPosition": 1,
+            "kiraMode": false,
+            "predictions": true,
+            "entries": [
+               {
+               "name": "World",
+               "flag": "WOR",
+               "skin": "rabbit",
+               "points": [1, 3, "TBD", "TBD"]
+               },
+               {
+               "name": "Germany",
+               "flag": "GER",
+               "skin": "octopus",
+               "points": [2, 2, "TBD", "TBD"]
+               },
+               {
+               "name": "France",
+               "flag": "FRA",
+               "skin": "panda",
+               "points": [3, 1, 1, "TBD"]
+               },
+            ]
+      }
+   ]
+}
+```
+
 ### Tiebreaker example:
 
 With the exact same points there will be a tie to break. Example:
