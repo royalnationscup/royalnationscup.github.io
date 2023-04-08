@@ -23,26 +23,94 @@
     // ============================
     // -> Gets loaded when executing html file offline
     var offlineLeaderboard = {
-        title: "Leaderboard",
-        subtitle: "Most prestigious royal tournament",
-        groups: [
+        "title": "Global Rank",
+        "subtitle": "Most prestigious royal tournament",
+        "enabled": true,
+        "groups": [
             {
-                title: "",
-                startPosition: 1,
-                successPositions: [1, 2, 3],
-                dangerPositions: [6, 7, 8],
-                kiraMode: false,
-                entries: [{
-                    name: "World",
-                    flag: "WOR",
-                    points: [5,6,3,2, 2],
-                    tiebreaker: 1
-                }, {
-                    name: "Germany",
-                    flag: "GER",
-                    points: [5,6,3,2, 2],
-                    tiebreaker: 2
-                }]
+                "title": "",
+                "startPosition": 1,
+                "successPositions": [1, 2, 3],
+                "dangerPositions": [8, 7, 6],
+                "kiraMode": false,
+                "predictions": true,
+                "entries": [
+                    {
+                    "name": "World",
+                    "flag": "WOR",
+                    "skin": "dolphin",
+                    "points": [7, 1, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "Germany",
+                    "flag": "GER",
+                    "skin": "fox",
+                    "points": [8, 7, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "Austrailia",
+                    "flag": "AUS",
+                    "skin": "kangaroo",
+                    "points": [2, 4, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "Brazil",
+                    "flag": "BRA",
+                    "skin": "grasshopper",
+                    "points": [4, 8, 3, "TBD"]
+                    },
+                    {
+                    "name": "Canada",
+                    "flag": "CAN",
+                    "skin": "ladybug",
+                    "points": [3, 5, 2, "TBD"]
+                    },
+                    {
+                    "name": "France",
+                    "flag": "FRA",
+                    "skin": "panda",
+                    "points": [6, 3, "TBD", "TBD"]
+                    },
+                    {
+                    "name": "United States",
+                    "flag": "USA",
+                    "skin": "zebra",
+                    "points": [5, 6, 1, "TBD"]
+                    },
+                    {
+                    "name": "United Kingdom",
+                    "flag": "GBR",
+                    "skin": "rabbit",
+                    "points": [1, 2, 4, "TBD"]
+                    }
+                ]
+            },
+            {
+                "title": "",
+                "startPosition": 1,
+                "successPositions": [1, 2, 3],
+                "dangerPositions": [8, 7, 6],
+                "kiraMode": false,
+                "predictions": false,
+                "entries": [
+                    {
+                    "name": "World",
+                    "flag": "WOR",
+                    "points": [1, 3, "TBD", 5],
+                    "tiebreaker": 1
+                    },
+                    {
+                    "name": "Germany",
+                    "flag": "GER",
+                    "points": [2, 2, 1, 3],
+                    "tiebreaker": 2
+                    },
+                    {
+                    "name": "France",
+                    "flag": "FRA",
+                    "points": [3, 1, 3, 1]
+                    }
+                ]
             }
         ]
     };
@@ -185,7 +253,7 @@
 
         function pointsToSum(points){
             if(isArray(points)){
-                return points.reduce((partialSum, p) => partialSum + p, 0)
+                return points.reduce((partialSum, p) => partialSum + (!isNaN(p) ? p : 0), 0)
             }
             return points;
         }
@@ -230,19 +298,57 @@
             }
             return 0;
         }
+        
+        function isTBD(str) {
+            if (typeof str === "string" && str.toLowerCase() === "tbd") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function buildPrediction(leaderboard) {
+            if(leaderboard.predictions){
+                leaderboard.entries.forEach(entry=>{
+                    if(isArray(entry.points)){
+                        let index = entry.points.findIndex(p=>isTBD(p));
+                        let prediction = 0;
+                        leaderboard.entries.forEach(e=>{
+                            if(isArray(e.points) && e.points[index] && !isNaN(e.points[index])){
+                                prediction = Math.max(prediction, e.points[index]);
+                            }
+                        });
+                        // add prediction property for the next round
+                        if(prediction > 0){
+                            entry["pointsWithPrediction"] = entry.points.slice().map(p=>!isNaN(p) ? p : 0);
+                            entry["pointsWithPrediction"][index] = prediction + 1;
+                            entry["predictionIndex"] = index;
+                            entry["prediction"] = prediction + 1;
+                        }
+                    }
+                });
+            }
+            // clean up points array
+            leaderboard.entries.forEach(entry=>{
+                // Remove all tbd from points and replace with 0
+                entry.points = isArray(entry.points) ? entry.points.map(p=>!isNaN(p) ? p : 0) : entry.points;
+            });
+        }
 
         function orderLeaderboard(leaderboard){
             // Sort the data for points
             leaderboard.entries.sort((a, b) => {
-                let pointCompare = comparePoints(a.points,b.points);
+                let aPoints = a["pointsWithPrediction"] ? a["pointsWithPrediction"] : a.points;
+                let bPoints = b["pointsWithPrediction"] ? b["pointsWithPrediction"] : b.points;
+                let pointCompare = comparePoints(aPoints, bPoints);
                 if (pointCompare != 0) {
                     return pointCompare;
                 }
                 if(a.tiebreaker || b.tiebreaker){
                     return comparePoints(a.tiebreaker, b.tiebreaker);
                 }
-                let max = Math.max(pointsToMax(a.points), pointsToMax(b.points));
-                if(isArray(a.points) && isArray(b.points) && max > 0){
+                let max = Math.max(pointsToMax(aPoints), pointsToMax(bPoints));
+                if(isArray(aPoints) && isArray(bPoints) && max > 0) {
                     a.hasTie = true;
                     b.hasTie = true;
                 }
@@ -289,10 +395,23 @@
             cell.appendChild(element);
         }
 
+        function renderAnimal(key, value, cell) {
+            let animal = DOMPurify.sanitize(value);
+            let element = document.createElement("img");
+            element.className = "table-cell flag-image"
+            element.onerror = ()=>element.src='assets/kekw.jpg';
+            element.src = `assets/animals/${animal}.png`;
+            cell.appendChild(element);
+        }
+
         function renderScore(key, value, cell) {
             let element = document.createElement("span");
             element.className = "table-cell score";
-            element.textContent = value;
+            if(value.prediction){
+                element.textContent = (value.score + value.prediction) + "+";  
+            } else {
+                element.textContent = value.score;
+            }
             cell.appendChild(element);
         }
         
@@ -300,6 +419,13 @@
             let span = document.createElement("span");
             span.className = "table-cell number-cell";
             span.textContent = !isNaN(value) ? value : "⚠️";
+            cell.appendChild(span);
+        }
+        
+        function renderTiebreaker(key, value, cell) {
+            let span = document.createElement("span");
+            span.className = "table-cell number-cell";
+            span.textContent = !isNaN(value) ? value : " ";
             cell.appendChild(span);
         }
 
@@ -314,15 +440,19 @@
 
         function renderRoundPoint(key, value, cell) {
             let span = document.createElement("span");
-            span.className = "table-cell " + (isNaN(value) && value != null ? "" : "number-cell");
-            span.textContent = value;
+            span.className = "table-cell number-cell " + (value.prediction? "prediction":"");
+            if(value.prediction) {
+                span.textContent = value.prediction + "+";
+            } else {
+                span.textContent = value.points;
+            }
             cell.appendChild(span);
         }
 
         function renderRoundStar(key, value, cell) {
             let span = document.createElement("span");
             span.className = "table-cell kira-star";
-            span.textContent = value > 0 ? "⭐" : "";
+            span.textContent = value.points > 0 ? "⭐" : "";
             cell.appendChild(span);
         }
 
@@ -338,6 +468,7 @@
             let socket = document.getElementById('table-socket');
             socket.innerHTML = "";
             for(let group of leaderboard.groups){
+                buildPrediction(group);
                 orderLeaderboard(group);                
                 let table = buildTable(group);
                 if(group.title){
@@ -365,6 +496,9 @@
                 } else {
                     data.set("", position);
                 }
+                if(entry.skin){
+                    data.set("skin", entry.skin);
+                }
                 data.set("flag", entry.flag);
                 data.set("name", entry.name);
                 if(leaderboard.successPositions && leaderboard.successPositions.indexOf(position) >= 0){
@@ -375,13 +509,26 @@
                 }
                 if(isArray(entry.points)){
                     entry.points.forEach((p, i) => {
-                        data.set(` ${i+1} `, p || " ");
+                        if(entry["prediction"] && entry["predictionIndex"] === i) {
+                            data.set(` ${i+1} `, {
+                                points: 0,
+                                prediction: entry["prediction"]
+                            });
+                        } else {
+                            data.set(` ${i+1} `, {
+                                points: p || " ",
+                                prediction: false
+                            });
+                        }
                     });
                 }
                 if(entry.points !== null){
-                    data.set("score", pointsToSum(entry.points));
+                    data.set("score", {
+                        score: pointsToSum(entry.points),
+                        prediction: leaderboard.predictions ? entry["prediction"] : null
+                    });
                 }
-                
+
                 if(entry.tiebreaker){
                     data.set("TB", pointsToSum(entry.tiebreaker));
                 }
@@ -399,12 +546,18 @@
             let table = TableBuilder.build(data, (key, value, cell, row) => {
                 if(key === "flag"){
                     renderFlag(key, value, cell);
+                } else if(key === "skin"){
+                    renderAnimal(key, value, cell);
+                } else if(key == "prediction"){
+                    // gets rendered with score
                 } else if(key === "score"){
-                    renderScore(key, value, cell);
+                    renderScore(key, value, cell, row);
                 } else if(key === "name"){
                     renderName(key, value, cell, row);
                 } else if(key === ""){
                     renderPosition(key, value, cell, row);
+                } else if(key === "TB"){
+                    renderTiebreaker(key, value, cell, row);
                 } else {
                     if(leaderboard.kiraMode) {
                         renderRoundStar(key, value, cell);

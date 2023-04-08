@@ -36,12 +36,20 @@ td > span {
 .number-cell{
     margin-left: 10px;
     margin-right: 10px;
+    min-width: 20px;
 }
 
 .score{
     /* better readable font for numbers */
     /* font-family: 'Nrvsbrkdwn', sans-serif !important; */
     font-size: 17px;
+}
+
+.prediction {
+    color: var(--warning) !important;
+    /* opacity: 80%; */
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 tr.success > td > .number-cell {
